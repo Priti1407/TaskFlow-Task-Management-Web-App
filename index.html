@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A responsive task management app built with HTML, CSS, and JavaScript." />
+  <title>TaskFlow | Task Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="TaskFlow home"><span class="brand-mark">✓</span> TaskFlow</a>
+      <p class="sidebar-label">WORKSPACE</p>
+      <nav class="side-nav" aria-label="Task filters">
+        <button class="nav-item active" data-filter="all"><span>▦</span> All tasks <span class="nav-count" id="allCount">0</span></button>
+        <button class="nav-item" data-filter="today"><span>◷</span> Today <span class="nav-count" id="todayCount">0</span></button>
+        <button class="nav-item" data-filter="pending"><span>○</span> Pending</button>
+        <button class="nav-item" data-filter="completed"><span>✓</span> Completed</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="tip-card">
+          <div class="tip-icon">✦</div>
+          <strong>Small steps, big progress.</strong>
+          <p>Focus on one task at a time and keep moving forward.</p>
+        </div>
+        <p class="sidebar-credit">Made with HTML, CSS & JavaScript</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open navigation">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="currentView">All tasks</strong></div>
+        <div class="topbar-right"><span class="today-date" id="todayDate"></span><div class="avatar" aria-label="User profile">P</div></div>
+      </header>
+
+      <section class="welcome-row">
+        <div>
+          <p class="eyebrow">YOUR PERSONAL WORKSPACE</p>
+          <h1 id="greeting">Good day! <span>Let's get things done.</span></h1>
+          <p class="welcome-subtitle">Plan your day, track your progress, and make room for what matters.</p>
+        </div>
+        <button class="primary-button" id="openAddTask"><span>＋</span> Add new task</button>
+      </section>
+
+      <section class="stats-grid" aria-label="Task statistics">
+        <article class="stat-card">
+          <div class="stat-top"><span>Total tasks</span><span class="stat-icon purple">▦</span></div>
+          <div class="stat-number" id="totalStat">0</div><div class="stat-foot">Tasks in your workspace</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>In progress</span><span class="stat-icon blue">◷</span></div>
+          <div class="stat-number" id="pendingStat">0</div><div class="stat-foot">Still on your list</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Completed</span><span class="stat-icon green">✓</span></div>
+          <div class="stat-number" id="completedStat">0</div><div class="stat-foot">Tasks you've finished</div>
+        </article>
+        <article class="stat-card progress-stat">
+          <div class="stat-top"><span>Completion rate</span><span class="stat-icon orange">↗</span></div>
+          <div class="stat-number"><span id="completionRate">0</span><small>%</small></div>
+          <div class="progress-track"><span id="progressBar"></span></div>
+        </article>
+      </section>
+
+      <section class="task-panel">
+        <div class="panel-heading">
+          <div><h2 id="listTitle">All tasks</h2><p id="listSubtitle">Everything you need to work on.</p></div>
+          <div class="task-tools">
+            <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search tasks..." aria-label="Search tasks"></label>
+            <select id="sortSelect" aria-label="Sort tasks">
+              <option value="created">Recently added</option>
+              <option value="due">Due date</option>
+              <option value="priority">Priority</option>
+              <option value="title">Title A–Z</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-row">
+          <div class="category-filters" id="categoryFilters">
+            <button class="category-chip selected" data-category="all">All categories</button>
+            <button class="category-chip" data-category="Work">Work</button>
+            <button class="category-chip" data-category="Personal">Personal</button>
+            <button class="category-chip" data-category="Study">Study</button>
+          </div>
+          <span class="task-count-label" id="visibleCount">0 tasks</span>
+        </div>
+        <div class="task-list" id="taskList" aria-live="polite"></div>
+        <div class="empty-state" id="emptyState">
+          <div class="empty-illustration">✓</div>
+          <h3>No tasks found</h3>
+          <p>Add a task or change your filters to see your list here.</p>
+          <button class="secondary-button" id="emptyAddTask">＋ Create your first task</button>
+        </div>
+      </section>
+      <footer class="app-footer"><span>TaskFlow</span> · Keep your focus, one task at a time.</footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="taskModal" aria-hidden="true">
+    <section class="task-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header"><div><p class="eyebrow">MAKE IT HAPPEN</p><h2 id="modalTitle">Create a task</h2></div><button class="icon-button" id="closeModal" aria-label="Close dialog">×</button></div>
+      <form id="taskForm">
+        <input type="hidden" id="taskId">
+        <label class="form-label" for="taskTitle">Task title <span>*</span></label>
+        <input class="form-control" id="taskTitle" name="title" placeholder="e.g. Finish portfolio homepage" maxlength="100" required>
+        <label class="form-label" for="taskDescription">Description <small>(optional)</small></label>
+        <textarea class="form-control" id="taskDescription" name="description" rows="3" placeholder="Add a few details about this task..."></textarea>
+        <div class="form-two-col">
+          <div><label class="form-label" for="taskCategory">Category</label><select class="form-control" id="taskCategory"><option>Work</option><option>Personal</option><option>Study</option></select></div>
+          <div><label class="form-label" for="taskPriority">Priority</label><select class="form-control" id="taskPriority"><option value="Medium">Medium</option><option value="High">High</option><option value="Low">Low</option></select></div>
+        </div>
+        <label class="form-label" for="taskDueDate">Due date <small>(optional)</small></label>
+        <input class="form-control" id="taskDueDate" type="date">
+        <div class="modal-actions"><button class="secondary-button" type="button" id="cancelModal">Cancel</button><button class="primary-button" type="submit" id="saveTaskButton">Save task</button></div>
+      </form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

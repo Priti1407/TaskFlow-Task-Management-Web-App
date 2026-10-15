@@ -24,6 +24,3 @@ A responsive task management project built with HTML, CSS, and vanilla JavaScrip
 - `style.css` — theme, layout, responsive styles
 - `script.js` — task CRUD, filters, sorting, search, and Local Storage
 
-## Suggested portfolio description
-**TaskFlow — Task Management Web App**  
-Built a responsive task manager using HTML, CSS, and JavaScript. Implemented task creation, editing, completion, deletion, category filters, search, sorting, progress statistics, and browser Local Storage persistence.
